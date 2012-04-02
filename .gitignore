@@ -1,0 +1,4 @@
+/.vagrant
+/.rvmrc
+/chef-repo/data_bags/projects/[a-z]*
+/chef-repo/data_bags/people/[a-z]*
