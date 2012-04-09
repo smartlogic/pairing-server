@@ -13,7 +13,13 @@ projects.each do |project|
   keys = []
   (attributes['members'] || []).each do |member|
     attributes = data_bag_item('people', member)
-    keys << attributes['public_key']
+    if attributes['public_key']
+      keys << attributes['public_key']
+    else
+      (attributes['public_keys'] || []).each do |key|
+        keys << key
+      end
+    end
   end
   node['project_member_keys'] = keys
 
