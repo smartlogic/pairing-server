@@ -25,6 +25,7 @@ package 'pdftk'
 package 'xpdf'
 package 'libgif4'
 
+package 'libssl0.9.8' # for prince to be happy
 remote_file '/tmp/prince_8.0-1ubuntu10.04_amd64.deb' do
   source 'http://www.princexml.com/download/prince_8.0-1ubuntu10.04_amd64.deb'
   not_if 'test -f /tmp/prince_8.0-1ubuntu10.04_amd64.deb'
