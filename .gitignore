@@ -1,4 +1,5 @@
 /.vagrant
 /.rvmrc
-/chef-repo/data_bags/projects/[a-z]*
-/chef-repo/data_bags/people/[a-z]*
+/chef-repo/data_bags/projects/*.json
+/chef-repo/data_bags/people/*.json
+/chef-repo/nodes/*.json
