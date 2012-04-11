@@ -17,6 +17,9 @@ include_recipe 'build-essential'
   package pkg
 end
 
+package 'vim'
+package 'ctags'
+
 # typical project dependencies
 package 'pdftk'
 package 'xpdf'

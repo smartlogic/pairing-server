@@ -1,3 +1,6 @@
+
+# Managed by chef
+
 XVFB=/usr/bin/Xvfb
 XVFBARGS=":<%= @display %> -ac -screen 0 1024x768x16"
 PIDFILE=/var/run/xvfb/xvfb_<%= @display %>.pid
@@ -21,3 +24,4 @@ case "$1" in
   exit 1
 esac
 exit 0
+

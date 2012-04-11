@@ -3,6 +3,7 @@ projects = data_bag('projects')
 
 projects.each_with_index do |project, index|
   attributes = data_bag_item('projects', project)
+
   home = "/home/#{project}"
   user(project) do
     home      home
@@ -12,11 +13,11 @@ projects.each_with_index do |project, index|
 
   keys = []
   (attributes['members'] || []).each do |member|
-    attributes = data_bag_item('people', member)
-    if attributes['public_key']
-      keys << attributes['public_key']
+    member_attributes = data_bag_item('people', member)
+    if member_attributes['public_key']
+      keys << member_attributes['public_key']
     else
-      (attributes['public_keys'] || []).each do |key|
+      (member_attributes['public_keys'] || []).each do |key|
         keys << key
       end
     end
@@ -37,6 +38,24 @@ projects.each_with_index do |project, index|
     variables :keys => keys
   end
 
+  gem_package "rake" do
+    action :install
+  end
+
+  if attributes['dotfiles'] && attributes['dotfiles']['repo'] && attributes['dotfiles']['init']
+    execute "install dotfiles for #{project}" do
+      user project
+      group project
+      cwd home
+      environment ({'HOME' => home})
+      command "git clone #{attributes['dotfiles']['repo']} .dotfiles && cd .dotfiles && ./#{attributes['dotfiles']['init']}"
+      creates "#{home}/.dotfiles"
+      action :run
+    end
+  else
+    log("Not installing any dotfiles, dotfiles:{repo, init} not found in #{project} data bag") { level :warn }
+  end
+
   execute "install rvm for #{project}" do
     user project
     group project
@@ -53,8 +72,8 @@ projects.each_with_index do |project, index|
       group project
       cwd home
       environment ({'HOME' => home})
-      command "rvm install #{attributes['ruby_version']}"
-      not_if "rvm list | grep '#{attributes['ruby_version']}'"
+      command "zsh -c 'rvm install #{attributes['ruby_version']}'"
+      not_if %{zsh -c "rvm list | grep '#{attributes['ruby_version']}'"}
       action :run
     end
   end
@@ -67,6 +86,8 @@ projects.each_with_index do |project, index|
       environment ({'HOME' => home})
       command "rvm install #{ruby_version}"
       not_if "rvm list | grep '#{ruby_version}'"
+      command "zsh -c 'rvm install #{ruby_version}'"
+      not_if %{zsh -c "rvm list | grep '#{ruby_version}'"}
       action :run
     end
   end
@@ -85,6 +106,12 @@ projects.each_with_index do |project, index|
   execute "restart xvfb #{project}" do
     command "sudo /etc/init.d/xvfb_#{project} restart"
     action :run
+  end
+
+  template "#{home}/.zshrc.local" do
+    source "zshrc_local.erb"
+    mode '0644'
+    variables :display => "#{99 - index}"
   end
 end
 
