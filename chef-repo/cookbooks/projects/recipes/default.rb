@@ -3,11 +3,12 @@ projects = data_bag('projects')
 
 projects.each_with_index do |project, index|
   attributes = data_bag_item('projects', project)
+  shell = attributes['shell'] || 'zsh'
 
   home = "/home/#{project}"
   user(project) do
     home      home
-    shell     '/bin/zsh'
+    shell     "/bin/#{shell}"
     supports  :manage_home => true
   end
 
@@ -42,14 +43,25 @@ projects.each_with_index do |project, index|
     action :install
   end
 
+  if shell == 'bash'
+    execute "clear .bashrc for #{project}" do
+      user project
+      group project
+      cwd home
+      environment ({'HOME' => home})
+      command %{rm .bashrc}
+      action :run
+    end
+  end
+
   if attributes['dotfiles'] && attributes['dotfiles']['repo'] && attributes['dotfiles']['init']
     execute "install dotfiles for #{project}" do
       user project
       group project
       cwd home
       environment ({'HOME' => home})
-      command "git clone #{attributes['dotfiles']['repo']} .dotfiles && cd .dotfiles && ./#{attributes['dotfiles']['init']}"
-      creates "#{home}/.dotfiles"
+      command "git clone #{attributes['dotfiles']['repo']} #{attributes['dotfiles']['install_loc']} && cd #{attributes['dotfiles']['install_loc']} && ./#{attributes['dotfiles']['init']}"
+      creates "#{home}/#{attributes['dotfiles']['install_loc']}"
       action :run
     end
   else
@@ -66,14 +78,33 @@ projects.each_with_index do |project, index|
     action :run
   end
 
+  if shell == 'bash'
+    execute "load rvm into .bashrc for #{project}" do
+      user project
+      group project
+      cwd home
+      environment ({'HOME' => home})
+      command %{echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function' >> ~/.bashrc}
+      not_if %{grep RVM .bashrc}
+      action :run
+    end
+
+    template "#{home}/.bash_profile" do
+      owner project
+      group project
+      source "bash_profile.erb"
+      mode '0644'
+    end
+  end
+
   if attributes['ruby_version']
     execute "install ruby #{attributes['ruby_version']} for #{project}" do
       user project
       group project
       cwd home
       environment ({'HOME' => home})
-      command "zsh -c 'rvm install #{attributes['ruby_version']}'"
-      not_if %{zsh -c "rvm list | grep '#{attributes['ruby_version']}'"}
+      command "#{shell} -c 'rvm install #{attributes['ruby_version']}'"
+      not_if %{#{shell} -c "rvm list | grep '#{attributes['ruby_version']}'"}
       action :run
     end
   end
@@ -84,10 +115,8 @@ projects.each_with_index do |project, index|
       group project
       cwd home
       environment ({'HOME' => home})
-      command "rvm install #{ruby_version}"
-      not_if "rvm list | grep '#{ruby_version}'"
-      command "zsh -c 'rvm install #{ruby_version}'"
-      not_if %{zsh -c "rvm list | grep '#{ruby_version}'"}
+      command "#{shell} -c 'rvm install #{ruby_version}'"
+      not_if %{#{shell} -c "rvm list | grep '#{ruby_version}'"}
       action :run
     end
   end
@@ -109,6 +138,16 @@ projects.each_with_index do |project, index|
   end
 
   template "#{home}/.zshrc.local" do
+    owner project
+    group project
+    source "zshrc_local.erb"
+    mode '0644'
+    variables :display => "#{99 - index}"
+  end
+
+  template "#{home}/.bashrc.local" do
+    owner project
+    group project
     source "zshrc_local.erb"
     mode '0644'
     variables :display => "#{99 - index}"

@@ -24,6 +24,8 @@ package 'ctags'
 package 'pdftk'
 package 'xpdf'
 package 'libgif4'
+package 'redis-server'
+package 'memcached'
 
 package 'libssl0.9.8' # for prince to be happy
 remote_file '/tmp/prince_8.0-1ubuntu10.04_amd64.deb' do
