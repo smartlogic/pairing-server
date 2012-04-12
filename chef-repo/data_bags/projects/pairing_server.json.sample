@@ -1,0 +1,13 @@
+{
+  "id": "pairing",
+  "members": [
+    "joe",
+    "tim"
+  ],
+  "ruby_version" : "1.9.2-p290",
+  "dotfiles" : {
+    "repo" : "git://repo/path/for/dotfiles.git"
+    "install_loc" : ".dotfiles",
+    "init" : "init.zsh"
+  }
+}

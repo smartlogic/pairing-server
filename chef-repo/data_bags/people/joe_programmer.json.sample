@@ -1,0 +1,8 @@
+{
+  "id": "joe_login",
+  "public_keys":
+    [
+      "ssh-rsa key_hash joe@example.com",
+      "ssh-rsa key_hash2 joe@example.com"
+    ]
+}
