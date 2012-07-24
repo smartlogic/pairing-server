@@ -19,6 +19,7 @@ end
 
 package 'vim'
 package 'ctags'
+package 'ack-grep'
 
 # typical project dependencies
 package 'pdftk'
