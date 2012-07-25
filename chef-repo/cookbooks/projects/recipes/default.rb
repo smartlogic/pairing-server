@@ -103,8 +103,8 @@ projects.each_with_index do |project, index|
       group project
       cwd home
       environment ({'HOME' => home})
-      command "#{shell} -c 'rvm install #{attributes['ruby_version']}'"
-      not_if %{#{shell} -c "rvm list | grep '#{attributes['ruby_version']}'"}
+      command "~/.rvm/bin/rvm install #{attributes['ruby_version']}"
+      not_if %{~/.rvm/bin/rvm list | grep '#{attributes['ruby_version']}'}
       action :run
     end
   end
@@ -115,8 +115,8 @@ projects.each_with_index do |project, index|
       group project
       cwd home
       environment ({'HOME' => home})
-      command "#{shell} -c 'rvm install #{ruby_version}'"
-      not_if %{#{shell} -c "rvm list | grep '#{ruby_version}'"}
+      command "~/.rvm/bin/rvm install #{ruby_version}"
+      not_if %{~/.rvm/bin/rvm list | grep '#{ruby_version}'}
       action :run
     end
   end
