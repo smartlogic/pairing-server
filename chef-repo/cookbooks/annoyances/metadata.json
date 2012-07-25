@@ -1,0 +1,29 @@
+{
+  "name": "annoyances",
+  "description": "Removes assorted operating system annoyances.",
+  "long_description": "Description\n===========\nFixes a number of minor operating system-based annoyances. There are recipes per platform, currently Ubuntu and Red Hat. Feel free to fork and submit your own patches.\n\nRecipes\n=======\n\ndefault\n-------\nLooks at the node's platform and includes the proper recipe, then removes `annoyances` from the node's run list on completion.\n\nrhel\n----\nRemoves any preexisting firewall rules, turns off SELinux, uninstalls apache if it's on for some reason and removes /root/.bash_logout if it exists. Red Hat, CentOS, Fedora and Scientific Linux are currently supported.\n\nubuntu\n------\nDoes an \"apt-get update\", turns off apparmor and turns off byobu. Currently Ubuntu-only.\n\nUsage\n=====\nInclude the `annoyances` recipe in your run list and it will make the various changes, then remove itself from the node's run list on completion.\n\nLicense and Author\n==================\n\nAuthor:: Matt Ray (<matt@opscode.com>)\nAuthor:: Joshua Timberman (<joshua@opscode.com>)\n\nCopyright 2012 Opscode, Inc.\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n",
+  "maintainer": "Opscode, Inc.",
+  "maintainer_email": "matt@opscode.com",
+  "license": "Apache 2.0",
+  "platforms": {
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.0.2"
+}
