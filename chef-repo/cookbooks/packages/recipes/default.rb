@@ -20,7 +20,7 @@ end
 
 package 'vim'
 
-if node['platform_version'] == "12.04"
+if node['platform'] == 'ubuntu' && node['platform_version'] == "12.04"
   package 'exuberant-ctags'
 else
   package 'ctags'
@@ -37,22 +37,33 @@ package 'memcached'
 
 package 'libssl0.9.8' # for prince to be happy
 
-if node['platform_version'] == "12.04"
-  remote_file '/tmp/prince_8.1-1_ubuntu12.04_amd64.deb' do
-    source 'http://www.princexml.com/download/prince_8.1-1_ubuntu12.04_amd64.deb'
-    not_if 'test -f /tmp/prince_8.1-1_ubuntu12.04_amd64.deb'
+if node['platform'] == 'ubuntu'
+  if node['platform_version'] == "12.04"
+    remote_file '/tmp/prince_8.1-1_ubuntu12.04_amd64.deb' do
+      source 'http://www.princexml.com/download/prince_8.1-1_ubuntu12.04_amd64.deb'
+      not_if 'test -f /tmp/prince_8.1-1_ubuntu12.04_amd64.deb'
+    end
+    package 'prince.deb' do
+      provider Chef::Provider::Package::Dpkg
+      source '/tmp/prince_8.1-1_ubuntu12.04_amd64.deb'
+    end
+  else
+    remote_file '/tmp/prince_8.1-1_ubuntu10.04_amd64.deb' do
+      source 'http://www.princexml.com/download/prince_8.1-1_ubuntu10.04_amd64.deb'
+      not_if 'test -f /tmp/prince_8.1-1_ubuntu10.04_amd64.deb'
+    end
+    package 'prince.deb' do
+      provider Chef::Provider::Package::Dpkg
+      source '/tmp/prince_8.1-1_ubuntu10.04_amd64.deb'
+    end
   end
-  package 'prince.deb' do
-    provider Chef::Provider::Package::Dpkg
-    source '/tmp/prince_8.1-1_ubuntu12.04_amd64.deb'
+elsif node['platform'] == 'centos'
+  remote_file '/tmp/prince-8.1-1.centos60.x86_64.rpm' do
+    source 'http://www.princexml.com/download/prince-8.1-1.centos60.x86_64.rpm'
+    not_if 'test -f /tmp/prince-8.1-1.centos60.x86_64.rpm'
   end
-else
-  remote_file '/tmp/prince_8.1-1_ubuntu10.04_amd64.deb' do
-    source 'http://www.princexml.com/download/prince_8.1-1_ubuntu10.04_amd64.deb'
-    not_if 'test -f /tmp/prince_8.1-1_ubuntu10.04_amd64.deb'
-  end
-  package 'prince.deb' do
-    provider Chef::Provider::Package::Dpkg
-    source '/tmp/prince_8.1-1_ubuntu10.04_amd64.deb'
+  package 'prince.rpm' do
+    provider Chef::Provider::Package::Rpm
+    source '/tmp/prince-8.1-1.centos60.x86_64.rpm'
   end
 end
