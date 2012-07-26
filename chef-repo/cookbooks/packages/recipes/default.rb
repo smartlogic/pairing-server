@@ -4,8 +4,22 @@ package 'zsh'
 package 'tmux'
 
 # Headless testing stuff
-package 'xvfb'
-package 'libqt4-dev'
+if node['platform'] == 'centos'
+  package "xorg-x11-server-Xvfb"
+  execute "add ATrpms" do
+    command %{rpm -i http://dl.atrpms.net/el6-x86_64/atrpms/stable/atrpms-repo-6-5.el6.x86_64.rpm}
+    not_if %{yum repolist | grep atrpms}
+    action :run
+  end
+  execute "install qt47 webkit" do
+    command %{yum install -y --enablerepo=atrpms-testing qt47-webkit-devel}
+    action :run
+  end
+else
+  package 'xvfb'
+  package 'libqt4-dev'
+end
+
 
 # Git
 package 'git-core'
@@ -14,8 +28,14 @@ package 'git-core'
 package 'curl'
 
 include_recipe 'build-essential'
-%w(libreadline-dev zlib1g-dev libssl-dev libxml2-dev libxslt1-dev libtool).each do |pkg|
-  package pkg
+if node['platform'] == 'centos'
+  %w(readline-devel zlib-devel openssl-devel libxml2-devel libxslt-devel libtool).each do |pkg|
+    package pkg
+  end
+else
+  %w(libreadline-dev zlib1g-dev libssl-dev libxml2-dev libxslt1-dev libtool).each do |pkg|
+    package pkg
+  end
 end
 
 package 'vim'

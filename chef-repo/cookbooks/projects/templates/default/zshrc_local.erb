@@ -2,3 +2,6 @@
 
 export DISPLAY=":<%= @display %>"
 alias ack='ack-grep'
+<% if node['platform'] == 'centos' %>
+export QMAKE=/usr/bin/qmake-qt47
+<% end %>
