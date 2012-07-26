@@ -1,5 +1,6 @@
 {
   "id": "pairing",
+  "shell" : "zsh",
   "members": [
     "joe",
     "tim"
