@@ -23,11 +23,20 @@ Edit the node json file for what you want
         "permit_root_login" : "no",
         "password_authentication": "no"
       },
+      "authorization" : {
+        "sudo" : {
+          "groups" : [
+            "admin",
+            "sudo"
+          ]
+        }
+      },
       "run_list" : [
         "recipe[build-essential]",
         "recipe[annoyances]",
         "recipe[openssl]",
         "recipe[openssh]",
+        "recipe[sudo]",
         "recipe[mysql::server]",
         "recipe[postgresql::server]",
         "recipe[packages]",

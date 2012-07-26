@@ -12,6 +12,11 @@ projects.each_with_index do |project, index|
     supports  :manage_home => true
   end
 
+  group "admin" do
+    members project
+    append true
+  end
+
   keys = []
   (attributes['members'] || []).each do |member|
     member_attributes = data_bag_item('people', member)
