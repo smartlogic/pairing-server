@@ -26,7 +26,6 @@ Edit the node json file for what you want
       "authorization" : {
         "sudo" : {
           "groups" : [
-            "admin",
             "sudo"
           ]
         }

@@ -12,7 +12,7 @@ projects.each_with_index do |project, index|
     supports  :manage_home => true
   end
 
-  group "admin" do
+  group "sudo" do
     members project
     append true
   end
