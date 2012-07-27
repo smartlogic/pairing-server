@@ -27,7 +27,8 @@ Edit the node json file for what you want
         "sudo" : {
           "groups" : [
             "sudo"
-          ]
+          ],
+          "passwordless" : true
         }
       },
       "run_list" : [
