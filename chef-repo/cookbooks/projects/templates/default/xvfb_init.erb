@@ -6,6 +6,7 @@ XVFBARGS=":<%= @display %> -ac -screen 0 1024x768x16"
 PIDFILE=/var/run/xvfb/xvfb_<%= @display %>.pid
 case "$1" in
   start)
+    mkdir -p /var/run/xvfb
     echo -n "Starting virtual X frame buffer: Xvfb"
     /sbin/start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --background --exec $XVFB -- $XVFBARGS
     echo "."

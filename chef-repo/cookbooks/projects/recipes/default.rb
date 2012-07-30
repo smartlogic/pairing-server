@@ -137,6 +137,11 @@ projects.each_with_index do |project, index|
     variables :display => "#{99 - index}", :project => project
   end
 
+  execute "register xvfb for run levels" do
+    command "sudo update-rc.d xvfb_#{project} defaults"
+    action :run
+  end
+
   execute "restart xvfb #{project}" do
     command "sudo /etc/init.d/xvfb_#{project} restart"
     action :run
