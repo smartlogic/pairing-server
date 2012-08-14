@@ -6,6 +6,7 @@ package 'tmux'
 # Headless testing stuff
 if node['platform'] == 'centos'
   package "xorg-x11-server-Xvfb"
+  package 'firefox'
   execute "add ATrpms" do
     command %{rpm -i http://dl.atrpms.net/el6-x86_64/atrpms/stable/atrpms-repo-6-5.el6.x86_64.rpm}
     not_if %{yum repolist | grep atrpms}
@@ -17,6 +18,7 @@ if node['platform'] == 'centos'
   end
 else
   package 'xvfb'
+  package 'firefox'
   package 'libqt4-dev'
 end
 
